@@ -10,8 +10,8 @@ A powerful JavaScript library for detecting and blocking bots, scrapers, and aut
 ```
 
 ### Direct Download
-- [Minified Version (Production)](https://github.com/med654/antibot-sdk/raw/v1.0.0/dist/antibot.min.js)
-- [Development Version](https://github.com/med654/antibot-sdk/raw/v1.0.0/dist/antibot.js)
+- [Minified Version (Production)](https://cdn.jsdelivr.net/gh/med654/antibot-sdk@latest/antibot.min.js)
+- [Development Version](https://cdn.jsdelivr.net/gh/med654/antibot-sdk@latest/antibot.js)
 
 ##🛡 Features
 
@@ -205,4 +205,5 @@ For issues, questions, or feature requests:
 - CDN distribution
 
 ---
+
 Protect your website from bots and automated traffic with AntiBot SDK.
