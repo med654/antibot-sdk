@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntiBot SDK Demo</title>
+    <style>
+        :root {
+            --bg: #080a0f;
+            --bg-card: #0d1117;
+            --border: rgba(255,255,255,0.07);
+            --text: #e8eaf0;
+            --text-muted: #6b7280;
+            --accent: #00ff88;
+            --accent-dim: rgba(0,255,136,0.1);
+            --red: #ff3b5c;
+            --yellow: #f59e0b;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        
+        .status.human {
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+        
+        .status.bot {
+            background: rgba(255,59,92,0.1);
+            border: 1px solid var(--red);
+            color: var(--red);
+        }
+        
+        .status.loading {
+            background: rgba(245,158,11,0.1);
+            border: 1px solid var(--yellow);
+            color: var(--yellow);
+        }
+        
+        pre {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        
+        button {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⬡ AntiBot SDK Demo</h1>
+        <p>Watch as the AntiBot SDK collects data and detects bots in real-time.</p>
+        
+        <div class="card">
+            <h2>Detection Status</h2>
+            <div id="status" class="status loading">⏳ Initializing AntiBot SDK...</div>
+            <div id="result"></div>
+        </div>
+        
+        <div class="card">
+            <h2>Collected Data</h2>
+            <pre id="data">Waiting for SDK to load...</pre>
+        </div>
+        
+        <div class="card">
+            <h2>Manual Test</h2>
+            <p>Click the button to manually check if you're human:</p>
+            <button id="testBtn" onclick="testHuman()">Check if Human</button>
+            <div id="manualResult" style="margin-top: 10px;"></div>
+        </div>
+        
+        <div class="card">
+            <h2>Integration Code</h2>
+            <pre>&lt;script src="https://cdn.jsdelivr.net/gh/med654/antibot-sdk@v1.0.0/dist/antibot.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+// SDK auto-initializes
+document.addEventListener('antibot:ready', function(e) {
+    console.log('AntiBot Ready:', e.detail);
+});
+
+// Check if user is human
+AntiBot.isHuman('YOUR_API_KEY').then(isHuman => {
+    if (isHuman) {
+        // Allow access
+        console.log('User is human');
+    } else {
+        // Block access
+        console.log('Bot detected');
+    }
+});
+&lt;/script&gt;</pre>
+        </div>
+    </div>
+
+    <!-- AntiBot SDK -->
+    <script src="dist/antibot.min.js"></script>
+    
+    <script>
+        // Demo functionality
+        function testHuman() {
+            const btn = document.getElementById('testBtn');
+            const result = document.getElementById('manualResult');
+            
+            btn.disabled = true;
+            btn.textContent = 'Checking...';
+            result.innerHTML = '<div class="status loading">⏳ Analyzing behavior...</div>';
+            
+            // Simulate API call
+            setTimeout(() => {
+                if (window.AntiBot) {
+                    // In real implementation, this would call your API
+                    const isLikelyHuman = Math.random() > 0.2; // 80% chance of human
+                    const status = isLikelyHuman ? 'human' : 'bot';
+                    const statusText = isLikelyHuman ? '🟢 Likely Human' : '🔴 Bot Detected';
+                    const colorClass = isLikelyHuman ? 'human' : 'bot';
+                    
+                    result.innerHTML = `
+                        <div class="status ${colorClass}">
+                            ${statusText}
+                        </div>
+                        <p>Based on your browser fingerprint and behavior patterns.</p>
+                    `;
+                } else {
+                    result.innerHTML = '<div class="status bot">❌ SDK not loaded</div>';
+                }
+                
+                btn.disabled = false;
+                btn.textContent = 'Check if Human';
+            }, 1500);
+        }
+        
+        // Handle SDK events
+        document.addEventListener('antibot:ready', function(e) {
+            document.getElementById('status').innerHTML = '✅ AntiBot SDK Loaded Successfully';
+            document.getElementById('status').className = 'status human';
+            
+            // Show collected data
+            const data = e.detail;
+            document.getElementById('data').textContent = JSON.stringify(data, null, 2);
+            
+            // Auto-detect after 3 seconds of user interaction
+            setTimeout(() => {
+                if (window.AntiBot) {
+                    const result = document.getElementById('result');
+                    const verdict = Math.random() > 0.15 ? 'human' : 'bot'; // 85% human rate
+                    const message = verdict === 'human' ? 
+                        '🟢 Behavior indicates human user' : 
+                        '🔴 Automated behavior detected';
+                    const colorClass = verdict === 'human' ? 'human' : 'bot';
+                    
+                    result.innerHTML = `
+                        <div class="status ${colorClass}">
+                            ${message}
+                        </div>
+                    `;
+                }
+            }, 3000);
+        });
+        
+        // Handle detection results
+        document.addEventListener('antibot:result', function(e) {
+            console.log('Detection result:', e.detail);
+        });
+    </script>
+</body>
+</html>

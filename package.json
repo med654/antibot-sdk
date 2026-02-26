@@ -1,0 +1,33 @@
+{
+  "name": "antibot-sdk",
+  "version": "1.0.0",
+  "description": "A powerful JavaScript library for detecting and blocking bots, scrapers, and automated traffic",
+  "main": "dist/antibot.min.js",
+  "scripts": {
+    "build": "terser src/antibot.js -o dist/antibot.min.js -c -m",
+    "dev": "terser src/antibot.js -o dist/antibot.js -b",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/med654/antibot-sdk.git"
+  },
+  "keywords": [
+    "bot",
+    "detection",
+    "security",
+    "antibot",
+    "captcha",
+    "fingerprinting",
+    "protection"
+  ],
+  "author": "AntiBot SaaS",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/med654/antibot-sdk/issues"
+  },
+  "homepage": "https://github.com/med654/antibot-sdk#readme",
+  "devDependencies": {
+    "terser": "^5.0.0"
+  }
+}
